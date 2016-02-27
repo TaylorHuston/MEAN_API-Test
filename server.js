@@ -4,14 +4,17 @@ var express = require('express'),
   bodyParser = require('body-parser'),
   morgan = require('morgan'),
   mongoose = require('mongoose'),
-  port = process.env.PORT || 8080;
+  port = process.env.PORT || 8080,
+  User = require('./app/models/user');
 
 //Use body parser to grab information from POST requests
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(bodyParser.json());
 
 //CORS requests
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, \Authorization');
@@ -25,15 +28,17 @@ app.use(morgan('dev'));
 //***ROUTES***
 
 //Root route
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
   res.send('Home page');
 });
 
 //Get an Express Router
 var apiRouter = express.Router();
 
-apiRouter.get('/', function(req, res) {
-  res.json({message: 'Welcome'});
+apiRouter.get('/', function (req, res) {
+  res.json({
+    message: 'Welcome'
+  });
 })
 
 //Register routes
