@@ -42,3 +42,5 @@ app.use('/api', apiRouter);
 //Start server
 app.listen(port);
 console.log("Live at localhost " + port);
+
+mongoose.connect("mongodb://taylor:testpass@ds017688.mlab.com:17688/api-test")
