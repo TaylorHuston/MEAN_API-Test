@@ -35,11 +35,17 @@ app.get('/', function (req, res) {
 //Get an Express Router
 var apiRouter = express.Router();
 
+//Happens before each request
+apiRouter.use(function (req, res, next) {
+  console.log('A thing just happened');
+  next();
+});
+
 apiRouter.get('/', function (req, res) {
   res.json({
     message: 'Welcome'
   });
-})
+});
 
 //Register routes
 app.use('/api', apiRouter);
