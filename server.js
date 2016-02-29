@@ -96,7 +96,40 @@ apiRouter.route('/users/:user_id')
 
       res.json(user);
     });
-  });
+  })
+
+  //Update user
+  .put(function (req, res) {
+    User.findById(req.params.user_ud, function (err, user) {
+      if (err) {
+        res.send(err);
+      }
+
+      if (req.body.name) {
+        user.name = req.body.name;
+      }
+
+      if (req.body.username) {
+        user.username = req.body.username;
+      }
+
+      if (req.body.password) {
+        user.password = req.body.password;
+      }
+
+      user.save(function (err) {
+        if (err) {
+          res.send(err);
+        }
+
+        res.json({
+          message: "User updated"
+        });
+      });
+
+    });
+
+});
 
 
 //Register routes
