@@ -47,6 +47,34 @@ apiRouter.get('/', function (req, res) {
   });
 });
 
+apiRouter.route('/users')
+  //Create user using POST at localhost:8080/api/users
+  .post(function (req, res) {
+    var user = new User();
+    user.name = req.body.name;
+    user.username = req.body.username;
+    user.password = req.body.password;
+
+    user.save(function (err) {
+      if (err) {
+        //Duplicate entry
+        if (err.code == 11000) {
+          return res.json({
+            success: false,
+            message: "A user with that username already exists."
+          });
+        } else {
+          return res.send(err);
+        }
+      }
+
+      res.json({
+        message: "User created."
+      });
+
+    });
+  });
+
 //Register routes
 app.use('/api', apiRouter);
 
@@ -54,4 +82,4 @@ app.use('/api', apiRouter);
 app.listen(port);
 console.log("Live at localhost " + port);
 
-mongoose.connect("mongodb://taylor:testpass@ds017688.mlab.com:17688/api-test")
+mongoose.connect("mongodb://taylor:testpass@ds017688.mlab.com:17688/api-test");
