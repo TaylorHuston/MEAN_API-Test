@@ -29,13 +29,62 @@ app.use(morgan('dev'));
 
 //***ROUTES***
 
-//Root route
+//Basic routes for homepage
 app.get('/', function (req, res) {
   res.send('Home page');
 });
 
 //Get an Express Router
 var apiRouter = express.Router();
+
+//Authenticaiton routes
+apiRouter.post('/authenticate', function (req, res) {
+  //Find user
+  User.findOne({
+      username: req.body.username
+    })
+    .select('name username password')
+    .exec(function (err, user) {
+      if (err) {
+        throw err;
+      }
+
+      if (!user) {
+        res.json({
+          success: false,
+          message: "User not found."
+        })
+      } else if (user) {
+
+        //Check password
+        var validPassword = user.comparePassword(req.body.password);
+        if (!validPassword) {
+          res.json({
+            success: false,
+            message: "Wrong password."
+          })
+        } else {
+          //Create token
+          var token = jwt.sign({
+            name: user.name,
+            username: user.username
+          }, superSecret, {
+            expiresInMinutes: 1440 //24 hours
+          });
+
+          res.json({
+            success: true,
+            message: "Token created.",
+            token: token
+          });
+        }
+
+      }
+
+
+    });
+
+});
 
 //Happens before each request
 apiRouter.use(function (req, res, next) {
