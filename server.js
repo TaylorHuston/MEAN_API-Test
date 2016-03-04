@@ -5,7 +5,8 @@ var express = require('express'),
   morgan = require('morgan'),
   mongoose = require('mongoose'),
   port = process.env.PORT || 8080,
-  User = require('./app/models/user');
+  User = require('./app/models/user'),
+  jwt = require('jsonwebtoken');
 
 //Use body parser to grab information from POST requests
 app.use(bodyParser.urlencoded({
