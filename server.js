@@ -6,7 +6,8 @@ var express = require('express'),
   mongoose = require('mongoose'),
   port = process.env.PORT || 8080,
   User = require('./app/models/user'),
-  jwt = require('jsonwebtoken');
+  jwt = require('jsonwebtoken'),
+  superSecret = 'ilovescotchscotchyscotchscotch';
 
 //Use body parser to grab information from POST requests
 app.use(bodyParser.urlencoded({
@@ -134,15 +135,17 @@ apiRouter.route('/users/:user_id')
 
 //Delete user
 .delete(function (req, res) {
-  User.remove({_id: req.params.user_id}, function (err, user) {
-      if (err) {
-        return res.send(err);
-      }
+  User.remove({
+    _id: req.params.user_id
+  }, function (err, user) {
+    if (err) {
+      return res.send(err);
+    }
 
-      res.json({
-        message: 'Successfully deleted'
-      });
+    res.json({
+      message: 'Successfully deleted'
     });
+  });
 })
 
 //Register routes
