@@ -89,7 +89,30 @@ apiRouter.post('/authenticate', function (req, res) {
 //Happens before each request
 apiRouter.use(function (req, res, next) {
   console.log('A thing just happened');
-  next();
+
+  var token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+  if (token) {
+    jwt.verify(token, superSecret, function (err, decoded) {
+      if (err) {
+        return res.status(403).send({
+          success: false,
+          message: "Failed to authenticate token."
+        });
+      } else {
+        req.decoded = decoded;
+
+        next();
+      }
+    });
+
+  } else {
+    //No token
+    return res.status(403).send({
+      success: false,
+      mesage: 'No token provided.'
+    });
+  }
 });
 
 apiRouter.get('/', function (req, res) {
