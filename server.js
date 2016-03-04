@@ -220,6 +220,10 @@ apiRouter.route('/users/:user_id')
   });
 })
 
+apiRouter.get('/me', function(req, res) {
+  res.send(req.decoded);
+})
+
 //Register routes
 app.use('/api', apiRouter);
 
